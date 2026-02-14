@@ -4,7 +4,7 @@
 }
 
 body {
-  background-color: #548687;
+  background-color: lightblue;
   text-align: center;
 }
 
@@ -72,3 +72,4 @@ body {
 .hide {
   display: none;
 }
+
