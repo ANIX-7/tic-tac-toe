@@ -3,9 +3,10 @@ let resetBtn = document.querySelector("#reset-btn");
 let newGameBtn = document.querySelector("#new-btn");
 let msgContainer = document.querySelector(".msg-container");
 let msg = document.querySelector("#msg");
+let celebration = document.getElementById("celebration");
 
-let turnO = true; //playerX, playerO
-let count = 0; //To Track Draw
+let turnO = true;
+let count = 0;
 
 const winPatterns = [
   [0, 1, 2],
@@ -23,19 +24,19 @@ const resetGame = () => {
   count = 0;
   enableBoxes();
   msgContainer.classList.add("hide");
+  celebration.innerHTML = "";
 };
 
 boxes.forEach((box) => {
   box.addEventListener("click", () => {
     if (turnO) {
-      //playerO
       box.innerText = "O";
       turnO = false;
     } else {
-      //playerX
       box.innerText = "X";
       turnO = true;
     }
+
     box.disabled = true;
     count++;
 
@@ -67,9 +68,12 @@ const enableBoxes = () => {
 };
 
 const showWinner = (winner) => {
-  msg.innerText = `Congratulations, Winner is ${winner}`;
+  msg.innerText = `🎉 Congratulations, Winner is ${winner}`;
   msgContainer.classList.remove("hide");
   disableBoxes();
+  celebrate();
+    playSound();
+
 };
 
 const checkWinner = () => {
@@ -78,7 +82,7 @@ const checkWinner = () => {
     let pos2Val = boxes[pattern[1]].innerText;
     let pos3Val = boxes[pattern[2]].innerText;
 
-    if (pos1Val != "" && pos2Val != "" && pos3Val != "") {
+    if (pos1Val !== "" && pos2Val !== "" && pos3Val !== "") {
       if (pos1Val === pos2Val && pos2Val === pos3Val) {
         showWinner(pos1Val);
         return true;
@@ -86,6 +90,32 @@ const checkWinner = () => {
     }
   }
 };
+
+function celebrate() {
+  for (let i = 0; i < 150; i++) {
+    const confetti = document.createElement("div");
+    confetti.classList.add("confetti");
+
+    confetti.style.left = Math.random() * 100 + "vw";
+    confetti.style.backgroundColor =
+      ["red", "blue", "green", "yellow", "purple", "orange"][
+        Math.floor(Math.random() * 6)
+      ];
+
+    confetti.style.animationDuration = Math.random() * 2 + 2 + "s";
+
+    celebration.appendChild(confetti);
+
+    setTimeout(() => {
+      confetti.remove();
+    }, 3000);
+  }
+}
+
+function playSound() {
+  let audio = new Audio("victory.mp3");
+  audio.play();
+}
 
 newGameBtn.addEventListener("click", resetGame);
 resetBtn.addEventListener("click", resetGame);
